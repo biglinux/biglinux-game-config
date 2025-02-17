@@ -2,11 +2,11 @@
 
 pkgname=comm-game-config
 pkgdesc="Community Game Configuration is a package whose function is to automate the installation and configuration of programs to make playing easier."
-depends=('python' 'steam' 'gamemode' 'mangohud')
-optdepends=('corectrl: For AMD GPU control'
-            'gwe: For NVIDIA GPU control'
-            'heroic-games-launcher-bin: For Epic Games and GOG'
-            'proton-ge-custom-bin: For Windows games compatibility')
+depends=('python' 'steam' 'gwe' 'mangohud' 'heroic-games-launcher' 'proton-ge-custom-bin')
+optdepends=(
+    'corectrl: For AMD GPU control'
+    'gwe: For NVIDIA GPU control'
+)
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
