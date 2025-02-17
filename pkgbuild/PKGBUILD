@@ -1,14 +1,12 @@
 # Maintainer: Tales A. Mendonça <talesam@gmail.com>
 
-pkgname=pkgbuild-template
-pkgdesc="Package template for Communitybig"
-# Uncomment and edit the following lines as needed
-#depends=('')
-#makedepends=('')
-#optdepends=('')
-#conflicts=('')
-#provides=('')
-#replaces=('')
+pkgname=comm-game-config
+pkgdesc="Community Game Configuration is a package whose function is to automate the installation and configuration of programs to make playing easier."
+depends=('python' 'steam' 'gamemode' 'mangohud')
+optdepends=('corectrl: For AMD GPU control'
+            'gwe: For NVIDIA GPU control'
+            'heroic-games-launcher-bin: For Epic Games and GOG'
+            'proton-ge-custom-bin: For Windows games compatibility')
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
@@ -32,14 +30,10 @@ prepare() {
 
 build() {
     cd "${srcdir}/${pkgname}"
-    # Add build steps here, if needed
-    # For example: make
-}
-
-check() {
-    cd "${srcdir}/${pkgname}"
-    # Add check/test steps here, if needed
-    # For example: make check
+    # Generate translations
+    for lang in pt en es ru zh ja de fr; do
+        msgfmt "po/${lang}.po" -o "locale/${lang}/LC_MESSAGES/${pkgname}.mo"
+    done
 }
 
 package() {
@@ -58,6 +52,12 @@ package() {
         if [ -d "${srcdir}/${dir}" ]; then
             cp -a "${srcdir}/${dir}" "${pkgdir}/"
         fi
+    done
+
+    # Install translations
+    for lang in pt en es ru zh ja de fr; do
+        install -Dm644 "locale/${lang}/LC_MESSAGES/${pkgname}.mo" \
+            "${pkgdir}/usr/share/locale/${lang}/LC_MESSAGES/${pkgname}.mo"
     done
 
     # Install license file if present
