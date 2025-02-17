@@ -8,12 +8,11 @@ depends=(
     'mangohud'
     'heroic-games-launcher'
     'proton-ge-custom-bin'
-    $(lspci | grep -q "AMD.*VGA\|VGA.*AMD" && echo 'corectrl')  # Add corectrl if AMD
-    $(lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA" && echo 'gwe')  # Add gwe if NVIDIA
 )
+
 optdepends=(
-    'corectrl: Controle para AMD'
-    'gwe: Controle para NVIDIA'
+    'corectrl: For AMD GPU control (install if you have an AMD GPU)'
+    'gwe: For NVIDIA GPU control (install if you have an NVIDIA GPU)'
 )
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
