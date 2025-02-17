@@ -1,33 +1,37 @@
 #!/bin/bash
 
 # Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+red='\033[0;31m'
+green='\033[0;32m'
+blue='\033[0;34m'
+yellow='\033[1;33m'
+nc='\033[0m' # No Color
 
 post_install() {
     clear
-    echo -e "${BLUE}═══════════════════════════════════════════${NC}"
-    echo -e "${GREEN}     Community Game Configuration Setup     ${NC}"
-    echo -e "${BLUE}═══════════════════════════════════════════${NC}"
+    echo -e "${blue}═══════════════════════════════════════════${nc}"
+    echo -e "${green}     Community Game Configuration Setup     ${nc}"
+    echo -e "${blue}═══════════════════════════════════════════${nc}"
     echo
 
-    # GPU Detection and info only (no installation)
-    echo -e "${YELLOW}Detected GPU:${NC}"
+    # GPU Detection and instructions
+    echo -e "${yellow}Detected GPU:${nc}"
     if lspci | grep -E "AMD.*VGA|VGA.*AMD" > /dev/null; then
-        echo -e "${GREEN}AMD GPU detected! CoreCtrl will be used for GPU control${NC}"
-    elif lspci | grep -E "NVIDIA.*VGA|VGA.*NVIDIA" > /dev/null; then
-        echo -e "${GREEN}NVIDIA GPU detected! GreenWithEnvy will be used for GPU control${NC}"
+        echo -e "${green}AMD GPU detected! For advanced control, install:${nc}"
+        echo -e "  sudo pacman -S corectrl"
+    elif lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA"; then
+        echo -e "${green}NVIDIA GPU detected! For advanced control, install:${nc}"
+        echo -e "  sudo pacman -S gwe"
+    else
+        echo -e "${yellow}No dedicated GPU detected. Skipping additional packages.${nc}"
     fi
 
     echo
-    echo -e "${YELLOW}Configuring MangoHud...${NC}"
+    echo -e "${yellow}Configuring MangoHud for all users...${nc}"
     
     # Configure MangoHud for new users
     mkdir -p /etc/skel/.config/MangoHud
-    cat > /etc/skel/.config/MangoHud/MangoHud.conf << EOF
+    cat > /etc/skel/.config/MangoHud/MangoHud.conf << 'EOF'
 background_alpha=0.9
 round_corners=10
 background_color=000000
@@ -79,32 +83,17 @@ fps_color=B22222,FDFD09,39F900
 fps_value=30,60,120
 EOF
 
-    # Configure MangoHud for existing users
-    for homedir in /home/*; do
-        if [ -d "$homedir" ]; then
-            username=$(basename "$homedir")
-            mangohud_dir="$homedir/.config/MangoHud"
-            mkdir -p "$mangohud_dir"
-            cp /etc/skel/.config/MangoHud/MangoHud.conf "$mangohud_dir/"
-            chown -R "$username:$username" "$mangohud_dir"
+    # Apply to existing users (real users only)
+    getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $6}' | while read -r homeDir; do
+        userMangoDir="$homeDir/.config/MangoHud"
+        mkdir -p "$userMangoDir"
+        if [ ! -f "$userMangoDir/MangoHud.conf" ]; then
+            cp -n /etc/skel/.config/MangoHud/MangoHud.conf "$userMangoDir/" 2>/dev/null || true
         fi
+        chown -R "$(stat -c '%U' "$homeDir")" "$userMangoDir"
     done
 
-    echo
-    echo -e "${GREEN}Installation completed successfully!${NC}"
-    echo
-    echo -e "${YELLOW}Important Instructions:${NC}"
-    echo -e "${BLUE}1.${NC} Launch Steam"
-    echo -e "${BLUE}2.${NC} Go to Steam menu -> Settings -> Compatibility"
-    echo -e "${BLUE}3.${NC} Enable 'Steam Play for all other titles'"
-    echo -e "${BLUE}4.${NC} Click OK to save settings"
-    echo -e "${BLUE}5.${NC} Restart Steam"
-    echo
-    echo -e "${YELLOW}Press Enter to start Steam...${NC}"
-    read
-    
-    # Start Steam in background
-    su - "$SUDO_USER" -c "steam &"
+    echo -e "${green}✓ MangoHud configured successfully!${nc}"
 }
 
 post_upgrade() {

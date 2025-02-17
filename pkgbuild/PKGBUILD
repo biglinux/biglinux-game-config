@@ -2,15 +2,24 @@
 
 pkgname=comm-game-config
 pkgdesc="Community Game Configuration is a package whose function is to automate the installation and configuration of programs to make playing easier."
-depends=('python' 'steam' 'gwe' 'mangohud' 'heroic-games-launcher' 'proton-ge-custom-bin')
+depends=(
+    'python'
+    'steam'
+    'mangohud'
+    'heroic-games-launcher'
+    'proton-ge-custom-bin'
+    $(lspci | grep -q "AMD.*VGA\|VGA.*AMD" && echo 'corectrl')  # Add corectrl if AMD
+    $(lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA" && echo 'gwe')  # Add gwe if NVIDIA
+)
 optdepends=(
-    'corectrl: For AMD GPU control'
-    'gwe: For NVIDIA GPU control'
+    'corectrl: Controle para AMD'
+    'gwe: Controle para NVIDIA'
 )
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
 license=('MIT')
+makedepends=('pciutils')
 url="https://github.com/communitybig/${pkgname}"
 source=("git+${url}.git")
 md5sums=('SKIP')
