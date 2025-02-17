@@ -10,10 +10,6 @@ depends=(
     'proton-ge-custom-bin'
 )
 
-optdepends=(
-    'corectrl: For AMD GPU control (install if you have an AMD GPU)'
-    'gwe: For NVIDIA GPU control (install if you have an NVIDIA GPU)'
-)
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
@@ -22,6 +18,12 @@ makedepends=('pciutils')
 url="https://github.com/communitybig/${pkgname}"
 source=("git+${url}.git")
 md5sums=('SKIP')
+
+if lspci | grep -E "AMD.*VGA|VGA.*AMD" > /dev/null; then
+    depends+=("corectrl")
+elif lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA"; then
+    depends+=("gwe")
+fi
 
 # Automatically detect and use the correct install file
 if [ -e "${pkgname}.install" ]; then
