@@ -30,10 +30,13 @@ prepare() {
 
 build() {
     cd "${srcdir}/${pkgname}"
-    # Generate translations
-    for lang in pt en es ru zh ja de fr; do
-        msgfmt "po/${lang}.po" -o "locale/${lang}/LC_MESSAGES/${pkgname}.mo"
-    done
+    # No build steps needed as we're using pre-translated files
+}
+
+check() {
+    cd "${srcdir}/${pkgname}"
+    # Add check/test steps here, if needed
+    # For example: make check
 }
 
 package() {
@@ -52,12 +55,6 @@ package() {
         if [ -d "${srcdir}/${dir}" ]; then
             cp -a "${srcdir}/${dir}" "${pkgdir}/"
         fi
-    done
-
-    # Install translations
-    for lang in pt en es ru zh ja de fr; do
-        install -Dm644 "locale/${lang}/LC_MESSAGES/${pkgname}.mo" \
-            "${pkgdir}/usr/share/locale/${lang}/LC_MESSAGES/${pkgname}.mo"
     done
 
     # Install license file if present
