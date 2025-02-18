@@ -14,75 +14,20 @@ post_install() {
     echo -e "${blue}═══════════════════════════════════════════${nc}"
     echo
 
-    # GPU Detection and instructions
-    echo -e "${yellow}Detected GPU:${nc}"
-    if lspci | grep -E "AMD.*VGA|VGA.*AMD" > /dev/null; then
-        echo -e "${green}AMD GPU detected! For advanced control, install:${nc}"
-        echo -e "  sudo pacman -S corectrl"
-    elif lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA"; then
-        echo -e "${green}NVIDIA GPU detected! For advanced control, install:${nc}"
-        echo -e "  sudo pacman -S gwe"
-    else
-        echo -e "${yellow}No dedicated GPU detected. Skipping additional packages.${nc}"
-    fi
+    # # GPU Detection and instructions
+    # echo -e "${yellow}Detected GPU:${nc}"
+    # if lspci | grep -E "AMD.*VGA|VGA.*AMD" > /dev/null; then
+    #     echo -e "${green}AMD GPU detected! For advanced control, install:${nc}"
+    #     echo -e "  sudo pacman -S corectrl"
+    # elif lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA"; then
+    #     echo -e "${green}NVIDIA GPU detected! For advanced control, install:${nc}"
+    #     echo -e "  sudo pacman -S gwe"
+    # else
+    #     echo -e "${yellow}No dedicated GPU detected. Skipping additional packages.${nc}"
+    # fi
 
     echo
     echo -e "${yellow}Configuring MangoHud for all users...${nc}"
-    
-    # Configure MangoHud for new users
-    mkdir -p /etc/skel/.config/MangoHud
-    cat > /etc/skel/.config/MangoHud/MangoHud.conf << 'EOF'
-background_alpha=0.9
-round_corners=10
-background_color=000000
-
-font_size=24
-text_color=FFFFFF
-position=top-center
-
-pci_dev=0:0b:00.0
-table_columns=6
-gpu_text=GPU
-gpu_stats
-gpu_load_change
-gpu_load_value=50,90
-gpu_load_color=FFFFFF,FFAA7F,CC0000
-gpu_core_clock
-gpu_mem_clock
-gpu_temp
-gpu_junction_temp
-gpu_power
-gpu_color=2E9762
-cpu_text=CPU
-cpu_stats
-cpu_load_change
-cpu_load_value=50,90
-cpu_load_color=FFFFFF,FFAA7F,CC0000
-cpu_mhz
-cpu_temp
-cpu_power
-swap
-vram
-vram_color=AD64C1
-ram
-ram_color=C26693
-fps
-fps_metrics=avg,0.01
-engine_version
-engine_color=EB5B5B
-vulkan_driver
-wine
-wine_color=EB5B5B
-frame_timing
-frametime_color=00FF00
-fps_limit_method=early
-toggle_fps_limit=F4
-fps_limit=60
-fps_color_change
-fps_color=B22222,FDFD09,39F900
-fps_value=30,60,120
-EOF
-
     # Apply to existing users (real users only)
     getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $6}' | while read -r homeDir; do
         userMangoDir="$homeDir/.config/MangoHud"
@@ -98,4 +43,14 @@ EOF
 
 post_upgrade() {
     post_install
+}
+
+post_remove() {
+    rm -f /etc/skel/.config/MangoHud/MangoHud.conf
+    getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $6}' | while read -r homeDir; do
+        userMangoDir="$homeDir/.config/MangoHud"
+        if [ -f "$userMangoDir/MangoHud.conf" ]; then
+            rm -rf "$userMangoDir/" 2>/dev/null || true
+        fi
+    done
 }
