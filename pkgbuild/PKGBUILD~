@@ -10,11 +10,6 @@ depends=(
     'proton-ge-custom-bin'
 )
 
-optdepends=(
-    'corectrl'
-    'gwe'
-)
-
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
