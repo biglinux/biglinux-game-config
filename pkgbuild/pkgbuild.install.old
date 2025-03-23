@@ -14,20 +14,20 @@ post_install() {
     echo -e "${blue}═══════════════════════════════════════════${nc}"
     echo
 
-    echo -e "${yellow}Pacotes de jogos opcionais disponíveis:${nc}"
-    echo -e "${green}• corectrl:${nc} Controle avançado para GPUs AMD"
-    echo -e "${green}• gwe:${nc} Controle avançado para GPUs NVIDIA"
-    echo -e "${green}• steam:${nc} Cliente de jogos Steam"
-    echo -e "${green}• mangohud:${nc} Monitor de desempenho em jogos"
-    echo -e "${green}• heroic-games-launcher:${nc} Cliente para jogos Epic Games"
-    echo -e "${green}• proton-ge-custom-bin:${nc} Versão personalizada do Proton"
-    echo -e "${green}• linux-steam-integration:${nc} Integração do Steam com Linux"
-    echo -e "${green}• python-steam:${nc} Biblioteca Python para interação com Steam"
-    echo
-    echo -e "Instale os desejados com: ${blue}sudo pacman -S [nome-do-pacote]${nc}"
-    echo
+    # # GPU Detection and instructions
+    # echo -e "${yellow}Detected GPU:${nc}"
+    # if lspci | grep -E "AMD.*VGA|VGA.*AMD" > /dev/null; then
+    #     echo -e "${green}AMD GPU detected! For advanced control, install:${nc}"
+    #     echo -e "  sudo pacman -S corectrl"
+    # elif lspci | grep -q "NVIDIA.*VGA\|VGA.*NVIDIA"; then
+    #     echo -e "${green}NVIDIA GPU detected! For advanced control, install:${nc}"
+    #     echo -e "  sudo pacman -S gwe"
+    # else
+    #     echo -e "${yellow}No dedicated GPU detected. Skipping additional packages.${nc}"
+    # fi
 
-    echo -e "${yellow}Configurando MangoHud para todos os usuários...${nc}"
+    echo
+    echo -e "${yellow}Configuring MangoHud for all users...${nc}"
     # Apply to existing users (real users only)
     getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $6}' | while read -r homeDir; do
         userMangoDir="$homeDir/.config/MangoHud"
@@ -38,10 +38,7 @@ post_install() {
         chown -R "$(stat -c '%U' "$homeDir")" "$userMangoDir"
     done
 
-    echo -e "${green}✓ MangoHud configurado com sucesso!${nc}"
-    echo
-    echo -e "${yellow}Dica:${nc} Para melhor experiência de jogo, instale os pacotes opcionais conforme"
-    echo -e "seu hardware e necessidades específicas."
+    echo -e "${green}✓ MangoHud configured successfully!${nc}"
 }
 
 post_upgrade() {
@@ -56,7 +53,4 @@ post_remove() {
             rm -rf "$userMangoDir/" 2>/dev/null || true
         fi
     done
-
-    echo -e "${yellow}Os pacotes opcionais instalados não foram removidos.${nc}"
-    echo -e "${yellow}Você pode removê-los manualmente com:${nc} sudo pacman -R [nome-do-pacote]"
 }

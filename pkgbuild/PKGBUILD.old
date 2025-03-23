@@ -1,13 +1,22 @@
 # Maintainer: Tales A. Mendonça <talesam@gmail.com>
+# Contributor: Narayan Silva <narayan.song@gmail.comm>
 
 pkgname=comm-game-config
 pkgdesc="Community Game Configuration is a package whose function is to automate the installation and configuration of programs to make playing easier."
 depends=(
     'python'
+    
+)
+
+optdepends=(
+    'corectrl'
+    'gwe'
     'steam'
     'mangohud'
     'heroic-games-launcher'
     'proton-ge-custom-bin'
+    'linux-steam-integration'
+    'python-steam'
 )
 
 pkgver=$(date +%Y%m%d)
