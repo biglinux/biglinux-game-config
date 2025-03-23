@@ -14,7 +14,7 @@ post_install() {
     echo -e "${blue}═══════════════════════════════════════════${nc}"
     echo
 
-    echo -e "${yellow}Pacotes de jogos opcionais disponíveis:${nc}"
+    echo -e "${yellow}Pacotes de jogos instalados:${nc}"
     echo -e "${green}• corectrl:${nc} Controle avançado para GPUs AMD"
     echo -e "${green}• gwe:${nc} Controle avançado para GPUs NVIDIA"
     echo -e "${green}• steam:${nc} Cliente de jogos Steam"
@@ -24,7 +24,8 @@ post_install() {
     echo -e "${green}• linux-steam-integration:${nc} Integração do Steam com Linux"
     echo -e "${green}• python-steam:${nc} Biblioteca Python para interação com Steam"
     echo
-    echo -e "Instale os desejados com: ${blue}sudo pacman -S [nome-do-pacote]${nc}"
+    echo -e "${yellow}Nota:${nc} Qualquer pacote pode ser removido individualmente sem afetar o resto da configuração."
+    echo -e "Para remover um pacote específico: ${blue}sudo pacman -R [nome-do-pacote]${nc}"
     echo
 
     echo -e "${yellow}Configurando MangoHud para todos os usuários...${nc}"
@@ -40,8 +41,7 @@ post_install() {
 
     echo -e "${green}✓ MangoHud configurado com sucesso!${nc}"
     echo
-    echo -e "${yellow}Dica:${nc} Para melhor experiência de jogo, instale os pacotes opcionais conforme"
-    echo -e "seu hardware e necessidades específicas."
+    echo -e "${yellow}Dica:${nc} Seu sistema está agora configurado para gaming. Reinicie para aplicar todas as configurações."
 }
 
 post_upgrade() {
@@ -57,6 +57,7 @@ post_remove() {
         fi
     done
 
-    echo -e "${yellow}Os pacotes opcionais instalados não foram removidos.${nc}"
-    echo -e "${yellow}Você pode removê-los manualmente com:${nc} sudo pacman -R [nome-do-pacote]"
+    echo -e "${yellow}Atenção:${nc} Os pacotes individuais de gaming não foram removidos automaticamente."
+    echo -e "Se deseja remover todos os pacotes, execute:"
+    echo -e "${blue}sudo pacman -R corectrl gwe steam mangohud heroic-games-launcher proton-ge-custom-bin linux-steam-integration python-steam${nc}"
 }

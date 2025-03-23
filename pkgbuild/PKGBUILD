@@ -5,6 +5,14 @@ pkgname=comm-game-config
 pkgdesc="Community Game Configuration é um pacote para automatizar a instalação e configuração de programas para facilitar jogos."
 depends=(
     'python'
+    'corectrl'
+    'gwe'
+    'steam'
+    'mangohud'
+    'heroic-games-launcher'
+    'proton-ge-custom-bin'
+    'linux-steam-integration'
+    'python-steam'
 )
 
 optdepends=(
@@ -35,11 +43,6 @@ prepare() {
 build() {
     cd "${srcdir}/${pkgname}"
     # No build steps needed as we're using pre-translated files
-}
-
-check() {
-    cd "${srcdir}/${pkgname}"
-    # Add check/test steps here, if needed
 }
 
 package() {
