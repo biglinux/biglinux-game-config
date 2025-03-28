@@ -5,25 +5,19 @@ pkgname=comm-game-config
 pkgdesc="Community Game Configuration é um pacote para automatizar a instalação e configuração de programas para facilitar jogos."
 depends=(
     'python'
+    
+)
+
+optdepends=(
     'corectrl'
     'gwe'
     'steam'
+    'steam-scolyte'
     'mangohud'
     'heroic-games-launcher'
     'proton-ge-custom-bin'
     'linux-steam-integration'
     'python-steam'
-)
-
-optdepends=(
-    'corectrl: Para controle avançado de GPUs AMD'
-    'gwe: Para controle avançado de GPUs NVIDIA'
-    'steam: Cliente de jogos Steam'
-    'mangohud: Monitor de desempenho em jogos'
-    'heroic-games-launcher: Cliente alternativo para jogos Epic Games'
-    'proton-ge-custom-bin: Versão personalizada do Proton para melhor compatibilidade'
-    'linux-steam-integration: Integração do Steam com Linux'
-    'python-steam: Biblioteca Python para interação com Steam'
 )
 
 pkgver=$(date +%Y%m%d)
