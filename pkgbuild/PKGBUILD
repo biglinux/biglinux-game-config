@@ -8,7 +8,7 @@ depends=(
     'corectrl'
     'gwe'
     'steam'
-    'steam-scolyte'
+    'steam-acolyte'
     'mangohud'
     'heroic-games-launcher'
     'proton-ge-custom-bin'
