@@ -1,7 +1,7 @@
 # Maintainer: Tales A. Mendonça <talesam@gmail.com>
 # Contributor: Narayan Silva <narayan.song@gmail.comm>
 
-pkgname=comm-game-config
+pkgname=biglinux-game-config
 pkgdesc="Community Game Configuration é um pacote para automatizar a instalação e configuração de programas para facilitar jogos."
 depends=(
     'python'
@@ -25,7 +25,7 @@ pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
 license=('MIT')
-url="https://github.com/communitybig/${pkgname}"
+url="https://github.com/biglinux/${pkgname}"
 source=("git+${url}.git")
 md5sums=('SKIP')
 install=pkgbuild.install
