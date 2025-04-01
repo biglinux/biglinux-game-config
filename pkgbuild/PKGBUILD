@@ -59,6 +59,74 @@ pacman -S --needed --noconfirm corectrl gwe steam steam-scolyte mangohud heroic-
 EOF
     chmod 755 "${pkgdir}/usr/bin/comm-game-install-deps"
 
+    # Create a script to configure Corectrl
+    cat > "${pkgdir}/usr/bin/comm-game-setup-corectrl" << 'EOF'
+#!/bin/bash
+
+# Colors
+red='\033[0;31m'
+green='\033[0;32m'
+blue='\033[0;34m'
+yellow='\033[1;33m'
+nc='\033[0m' # No Color
+
+# 1. Add AMD GPU parameter to GRUB
+setup_grub_parameter() {
+    if grep -q "amdgpu.ppfeaturemask=0xffffffff" /etc/default/grub; then
+        echo -e "${green}GPU parameter já configurado no GRUB.${nc}"
+    else
+        # Backup the original file
+        cp /etc/default/grub /etc/default/grub.bak
+        
+        # Add parameter to GRUB_CMDLINE_LINUX_DEFAULT
+        sed -i 's/\(GRUB_CMDLINE_LINUX_DEFAULT="\)/\1amdgpu.ppfeaturemask=0xffffffff /' /etc/default/grub
+        
+        # Update GRUB
+        grub-mkconfig -o /boot/grub/grub.cfg
+        
+        echo -e "${green}✓ Parâmetro AMD GPU adicionado ao GRUB e configuração atualizada!${nc}"
+    fi
+}
+
+# 2. Create Polkit rule for Corectrl
+setup_polkit_rule() {
+    local polkit_dir="/etc/polkit-1/rules.d"
+    local polkit_file="${polkit_dir}/90-corectrl.rules"
+    
+    mkdir -p "$polkit_dir"
+    
+    # Get all users with UID >= 1000
+    getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1}' | while read -r username; do
+        # Create or update the polkit rule file
+        cat > "$polkit_file" << EOL
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.corectrl.helper.init" ||
+         action.id == "org.corectrl.helperkiller.init") &&
+        subject.local == true &&
+        subject.active == true &&
+        subject.isInGroup("$username")) {
+            return polkit.Result.YES;
+    }
+});
+EOL
+        echo -e "${green}✓ Regra Polkit configurada para usuário $username${nc}"
+    done
+    
+    # Set permissions
+    chmod 644 "$polkit_file"
+}
+
+# Run configuration functions
+setup_grub_parameter
+setup_polkit_rule
+
+echo -e "${blue}═══════════════════════════════════════════${nc}"
+echo -e "${green}     Configuração do Corectrl Concluída    ${nc}"
+echo -e "${blue}═══════════════════════════════════════════${nc}"
+echo -e "${yellow}Reinicie o sistema para aplicar todas as alterações.${nc}"
+EOF
+    chmod 755 "${pkgdir}/usr/bin/comm-game-setup-corectrl"
+
     # Install files
     local dirs=("usr" "etc" "opt")
     for dir in "${dirs[@]}"; do

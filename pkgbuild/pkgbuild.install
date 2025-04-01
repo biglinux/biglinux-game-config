@@ -29,6 +29,9 @@ post_install() {
     echo -e "• python-steam: Biblioteca Python para interação com Steam"
     echo
     
+    echo -e "${yellow}Configurando Corectrl...${nc}"
+    comm-game-setup-corectrl
+    echo
 
     echo -e "${yellow}Configurando MangoHud para todos os usuários...${nc}"
     # Apply to existing users (real users only)
@@ -43,6 +46,9 @@ post_install() {
 
     echo -e "${green}✓ MangoHud configurado com sucesso!${nc}"
     echo
+    echo -e "${yellow}Nota:${nc} Qualquer pacote pode ser removido individualmente sem afetar o resto da configuração."
+    echo -e "Para remover um pacote específico: ${blue}sudo pacman -R [nome-do-pacote]${nc}"
+    echo
     echo -e "${yellow}Dica:${nc} Seu sistema está agora configurado para gaming. Reinicie para aplicar todas as configurações."
 }
 
@@ -51,6 +57,9 @@ post_upgrade() {
     comm-game-install-deps
     
     echo -e "${green}✓ Pacotes atualizados com sucesso!${nc}"
+    
+    echo -e "${yellow}Atualizando configurações do Corectrl...${nc}"
+    comm-game-setup-corectrl
     
     echo -e "${yellow}Configurando MangoHud para todos os usuários...${nc}"
     # Apply to existing users (real users only)
@@ -75,6 +84,23 @@ post_remove() {
         fi
     done
 
-    echo -e "${yellow}Atenção:${nc} Os pacotes de gaming não foram removidos automaticamente."
+    # Remove Corectrl configurations
+    if [ -f "/etc/polkit-1/rules.d/90-corectrl.rules" ]; then
+        rm -f "/etc/polkit-1/rules.d/90-corectrl.rules"
+        echo -e "${green}✓ Arquivo de regras do Corectrl removido.${nc}"
+    fi
     
+    # Restore original GRUB configuration if backup exists
+    if [ -f "/etc/default/grub.bak" ]; then
+        mv /etc/default/grub.bak /etc/default/grub
+        grub-mkconfig -o /boot/grub/grub.cfg
+        echo -e "${green}✓ Configuração original do GRUB restaurada.${nc}"
+    else
+        echo -e "${yellow}Aviso:${nc} Para remover o parâmetro AMD GPU do GRUB, edite manualmente /etc/default/grub"
+        echo -e "e remova 'amdgpu.ppfeaturemask=0xffffffff', depois execute: sudo grub-mkconfig -o /boot/grub/grub.cfg"
+    fi
+
+    echo -e "${yellow}Atenção:${nc} Os pacotes individuais de gaming não foram removidos automaticamente."
+    echo -e "Se deseja remover todos os pacotes, execute:"
+    echo -e "${blue}sudo pacman -R corectrl gwe steam steam-scolyte mangohud heroic-games-launcher proton-ge-custom-bin linux-steam-integration python-steam${nc}"
 }
