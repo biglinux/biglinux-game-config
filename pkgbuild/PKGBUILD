@@ -1,10 +1,12 @@
 # Maintainer: Tales A. Mendonça <talesam@gmail.com>
 # Contributor: Narayan Silva <narayan.song@gmail.comm>
 
-pkgname=comm-game-config
-pkgdesc="Community Game Configuration é um pacote para automatizar a instalação e configuração de programas para facilitar jogos."
+pkgname=biglinux-game-config
+pkgdesc="BigLinux Game Configuration is a package to automatize installation and configuration of apps related to gaming."
+provides=('comm-game-config')
+conflicts=('comm-game-config')
+replaces=('comm-game-config')
 depends=(
-    'python'
     'corectrl'
     'gwe'
     'steam'
