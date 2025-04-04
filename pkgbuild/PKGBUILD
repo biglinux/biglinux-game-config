@@ -4,8 +4,8 @@
 pkgname=biglinux-game-config 
 pkgdesc="BigLinux Game Configuration is a package to automatize installation and configuration of apps related to gaming."
 provides=('biglinux-game-config')
-conflicts=('biglinux-game-config ')
-replaces=('biglinux-game-config ')
+conflicts=('biglinux-game-config')
+replaces=('biglinux-game-config')
 depends=(
     'corectrl'
     'gwe'
