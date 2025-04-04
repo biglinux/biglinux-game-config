@@ -1,11 +1,11 @@
 # Maintainer: Tales A. Mendonça <talesam@gmail.com>
 # Contributor: Narayan Silva <narayan.song@gmail.comm>
 
-pkgname=comm-game-config
+pkgname=biglinux-game-config 
 pkgdesc="BigLinux Game Configuration is a package to automatize installation and configuration of apps related to gaming."
 provides=('biglinux-game-config')
-conflicts=('comm-game-config')
-replaces=('comm-game-config')
+conflicts=('biglinux-game-config ')
+replaces=('biglinux-game-config ')
 depends=(
     'corectrl'
     'gwe'
@@ -16,7 +16,6 @@ depends=(
     'proton-ge-custom-bin'
     'linux-steam-integration'
     'python-steam'
-    
 )
 
 optdepends=(
@@ -27,7 +26,7 @@ pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
 license=('MIT')
-url="https://github.com/communitybig/${pkgname}"
+url="https://github.com/biglinux/${pkgname}"
 source=("git+${url}.git")
 md5sums=('SKIP')
 install=pkgbuild.install
