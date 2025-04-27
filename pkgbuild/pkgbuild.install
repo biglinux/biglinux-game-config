@@ -46,9 +46,6 @@ post_install() {
 
     echo -e "${green}✓ MangoHud configurado com sucesso!${nc}"
     echo
-    echo -e "${yellow}Nota:${nc} Qualquer pacote pode ser removido individualmente sem afetar o resto da configuração."
-    echo -e "Para remover um pacote específico: ${blue}sudo pacman -R [nome-do-pacote]${nc}"
-    echo
     echo -e "${yellow}Dica:${nc} Seu sistema está agora configurado para gaming. Reinicie para aplicar todas as configurações."
 }
 
@@ -99,8 +96,4 @@ post_remove() {
         echo -e "${yellow}Aviso:${nc} Para remover o parâmetro AMD GPU do GRUB, edite manualmente /etc/default/grub"
         echo -e "e remova 'amdgpu.ppfeaturemask=0xffffffff', depois execute: sudo grub-mkconfig -o /boot/grub/grub.cfg"
     fi
-
-    echo -e "${yellow}Atenção:${nc} Os pacotes individuais de gaming não foram removidos automaticamente."
-    echo -e "Se deseja remover todos os pacotes, execute:"
-    echo -e "${blue}sudo pacman -R corectrl gwe steam steam-scolyte mangohud heroic-games-launcher proton-ge-custom-bin linux-steam-integration python-steam${nc}"
 }
