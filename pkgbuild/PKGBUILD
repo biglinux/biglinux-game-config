@@ -51,14 +51,7 @@ package() {
         srcdir="${srcdir}/${pkgname}"
     fi
 
-    # Create a script to install optional dependencies
     mkdir -p "${pkgdir}/usr/bin"
-    cat > "${pkgdir}/usr/bin/comm-game-install-deps" << 'EOF'
-#!/bin/bash
-# Install all gaming dependencies
-pacman -S --needed --noconfirm corectrl gwe steam steam-scolyte mangohud heroic-games-launcher proton-ge-custom-bin linux-steam-integration python-steam
-EOF
-    chmod 755 "${pkgdir}/usr/bin/comm-game-install-deps"
 
     # Create a script to configure Corectrl
     cat > "${pkgdir}/usr/bin/comm-game-setup-corectrl" << 'EOF'

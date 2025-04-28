@@ -13,21 +13,6 @@ post_install() {
     echo -e "${green}     Community Game Configuration Setup     ${nc}"
     echo -e "${blue}═══════════════════════════════════════════${nc}"
     echo
-
-    echo -e "${yellow}Instalando pacotes de gaming...${nc}"
-    comm-game-install-deps
-    
-    echo -e "${green}✓ Pacotes instalados:${nc}"
-    echo -e "• corectrl: Controle avançado para GPUs AMD"
-    echo -e "• gwe: Controle avançado para GPUs NVIDIA"
-    echo -e "• steam: Cliente de jogos Steam"
-    echo -e "• steam-scolyte: Cliente Steam alternativo"
-    echo -e "• mangohud: Monitor de desempenho em jogos"
-    echo -e "• heroic-games-launcher: Cliente para jogos Epic Games"
-    echo -e "• proton-ge-custom-bin: Versão personalizada do Proton"
-    echo -e "• linux-steam-integration: Integração do Steam com Linux"
-    echo -e "• python-steam: Biblioteca Python para interação com Steam"
-    echo
     
     echo -e "${yellow}Configurando Corectrl...${nc}"
     comm-game-setup-corectrl
@@ -46,18 +31,10 @@ post_install() {
 
     echo -e "${green}✓ MangoHud configurado com sucesso!${nc}"
     echo
-    echo -e "${yellow}Nota:${nc} Qualquer pacote pode ser removido individualmente sem afetar o resto da configuração."
-    echo -e "Para remover um pacote específico: ${blue}sudo pacman -R [nome-do-pacote]${nc}"
-    echo
     echo -e "${yellow}Dica:${nc} Seu sistema está agora configurado para gaming. Reinicie para aplicar todas as configurações."
 }
 
 post_upgrade() {
-    echo -e "${yellow}Atualizando pacotes de gaming...${nc}"
-    comm-game-install-deps
-    
-    echo -e "${green}✓ Pacotes atualizados com sucesso!${nc}"
-    
     echo -e "${yellow}Atualizando configurações do Corectrl...${nc}"
     comm-game-setup-corectrl
     
@@ -99,8 +76,4 @@ post_remove() {
         echo -e "${yellow}Aviso:${nc} Para remover o parâmetro AMD GPU do GRUB, edite manualmente /etc/default/grub"
         echo -e "e remova 'amdgpu.ppfeaturemask=0xffffffff', depois execute: sudo grub-mkconfig -o /boot/grub/grub.cfg"
     fi
-
-    echo -e "${yellow}Atenção:${nc} Os pacotes individuais de gaming não foram removidos automaticamente."
-    echo -e "Se deseja remover todos os pacotes, execute:"
-    echo -e "${blue}sudo pacman -R corectrl gwe steam steam-scolyte mangohud heroic-games-launcher proton-ge-custom-bin linux-steam-integration python-steam${nc}"
 }
