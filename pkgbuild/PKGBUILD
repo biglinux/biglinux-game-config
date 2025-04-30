@@ -73,7 +73,7 @@ setup_grub_parameter() {
         cp /etc/default/grub /etc/default/grub.bak
         
         # Add parameter to GRUB_CMDLINE_LINUX_DEFAULT
-        sed -i 's/\(GRUB_CMDLINE_LINUX_DEFAULT="\)/\1amdgpu.ppfeaturemask=0xffffffff /' /etc/default/grub
+        sed -i 's/\(GRUB_CMDLINE_LINUX="\)/\1amdgpu.ppfeaturemask=0xffffffff /' /etc/default/grub
         
         # Update GRUB
         grub-mkconfig -o /boot/grub/grub.cfg
