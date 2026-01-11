@@ -14,7 +14,6 @@ depends=(
     'mangohud'
     'heroic-games-launcher'
     'proton-ge-custom-bin'
-    'linux-steam-integration'
     'python-steam'
 )
 
